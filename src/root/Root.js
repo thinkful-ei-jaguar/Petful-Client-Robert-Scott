@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Petservices from "../Petservices"
-
+import peopleservice from '../peopleservice'
 class Root extends Component {
   constructor(props){
     super(props);
@@ -10,6 +10,8 @@ class Root extends Component {
       onecat: {},
       onedog:{},
       isLoading: false,
+      isLoading2:false,
+      people:[]
     }
   }
 
@@ -37,6 +39,14 @@ class Root extends Component {
         isLoading: true,
       })
     });
+    peopleservice.getpeople()
+    .then(peoples=>{
+      this.setState({
+        people:peoples,
+        isLoading2: true,
+      })
+    })
+    
   }
 
   handleDelete = (event, type) => {
@@ -45,6 +55,12 @@ class Root extends Component {
     this.componentDidMount();
   }
 
+  getALLPeople =() =>{
+    return this.state.people.map(people => <div>
+      <h3>next: {people}</h3>
+    </div>
+    )
+  }
 
 
   allOtherCats = () => {
@@ -68,6 +84,8 @@ class Root extends Component {
   render(){
   return( <div>
     <h1>Petful</h1>
+    <h2>next person to adopt</h2>
+    {this.state.isLoading2 ? this.getALLPeople() : <div />}
     <section>
       <div className='cat'>
         <h2>Next Cat In Line for Adoption</h2>
