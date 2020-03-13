@@ -15,8 +15,20 @@ const PetService = {
             ? res.json().then(e => Promise.reject(e))
             : res.json()
         })    
-    }
+    },
 
+    deletePet(breed){
+
+        return fetch(link, {
+            method: 'DELETE',
+            headers: {
+                'content-type': 'application/json',
+            },
+            body: JSON.stringify({
+                type: breed
+            })
+        })
+    }
 }
 
 export default PetService
