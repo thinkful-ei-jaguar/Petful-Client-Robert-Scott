@@ -9,6 +9,7 @@ class Root extends Component {
       dogs : [],
       onecat: {},
       onedog:{},
+      isLoading: false,
     }
   }
 
@@ -21,7 +22,21 @@ class Root extends Component {
         onedog:pets[1],
       })
       //console.log(this.state)
-    })
+    });
+    Petservices.getNextInLineCats()
+    .then(cats => {
+      console.log(cats)
+      this.setState({
+        cats: cats,
+      })
+    });
+    Petservices.getNextInLineDogs()
+    .then(dogs => {
+      this.setState({
+        dogs: dogs,
+        isLoading: true,
+      })
+    });
   }
 
   handleDelete = (event, type) => {
@@ -30,13 +45,34 @@ class Root extends Component {
     this.componentDidMount();
   }
 
+
+
+  allOtherCats = () => {
+    return this.state.cats.map(cat => <div>
+          <img src={cat.imageURL} alt='Cat Pic'></img>
+          <h3>Name: {cat.name}</h3>
+        </div>
+    )
+  }
+
+  allOtherDogs = () => {
+    return this.state.dogs.map(dog => 
+        <div>
+          <img src={dog.imageURL} alt='Dog Pic'></img>
+          <h3>Name: {dog.name}</h3>
+        </div>
+      );
+    
+  }
+
   render(){
   return( <div>
     <h1>Petful</h1>
     <section>
       <div className='cat'>
+        <h2>Next Cat In Line for Adoption</h2>
         <img src={this.state.onecat.imageURL} alt='Cat Pic'></img>
-        <h2>Name: {this.state.onecat.name}</h2>
+        <h3>Name: {this.state.onecat.name}</h3>
         <p>Age: {this.state.onecat.age}</p>
         <p>Breed: {this.state.onecat.breed}</p>
         <p>Description: {this.state.onecat.description}</p>
@@ -49,8 +85,9 @@ class Root extends Component {
 
     <section>
       <div className='dog'>
+        <h2>Next Dog In Line for Adoption</h2>
         <img src={this.state.onedog.imageURL} alt='Dog Pic'></img>
-        <h2>Name: {this.state.onedog.name}</h2>
+        <h3>Name: {this.state.onedog.name}</h3>
         <p>Age: {this.state.onedog.age}</p>
         <p>Breed: {this.state.onedog.breed}</p>
         <p>Description: {this.state.onedog.description}</p>
@@ -59,7 +96,12 @@ class Root extends Component {
         <button onClick={e => this.handleDelete(e, 'dog')}>Adopt</button>
       </div>
     </section>
-    
+
+    <h2>All Other Animals In Line for Adoption</h2>
+
+    {this.state.isLoading ? this.allOtherCats() : <div />}
+    {this.state.isLoading ? this.allOtherDogs() : <div /> }
+   
   </div>
   )
   }
