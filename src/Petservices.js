@@ -16,7 +16,32 @@ const PetService = {
             : res.json()
         })    
     },
-
+    getNextInLineCats(){
+        return fetch(`${link}/allcats`,{
+            method:'GET',
+            headers:{
+                'content-type':"application/json"
+            }
+        })
+        .then(res => {
+            return (!res.ok)
+            ? res.json().then(e => Promise.reject(e))
+            : res.json()
+        })    
+    },
+    getNextInLineDogs(){
+        return fetch(`${link}/alldogs`,{
+            method:'GET',
+            headers:{
+                'content-type':"application/json"
+            }
+        })
+        .then(res=>{
+            return (!res.ok)
+            ? res.json().then(e => Promise.reject(e))
+            : res.json()
+        })   
+    },
     deletePet(breed){
 
         return fetch(link, {
