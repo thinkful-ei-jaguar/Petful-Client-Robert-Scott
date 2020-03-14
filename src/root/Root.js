@@ -11,6 +11,7 @@ class Root extends Component {
       dogs : [],
       onecat: {},
       onedog:{},
+      name:'',
       isLoading: false,
       isLoading2: false,
       isLoading3: false,
@@ -22,7 +23,7 @@ class Root extends Component {
   componentDidMount = () => {
     Petservices.getpets()
     .then(pets => {
-      console.log(pets);
+      //console.log(pets);
       this.setState({
         onecat:pets[0],
         onedog:pets[1],
@@ -31,7 +32,7 @@ class Root extends Component {
     });
     Petservices.getNextInLineCats()
     .then(cats => {
-      console.log(cats)
+      //console.log(cats)
       this.setState({
         cats: cats,
       })
@@ -50,13 +51,21 @@ class Root extends Component {
         isLoading2: true,
       })
     });
-    peopleservice.addperson()
-    .then(person => {
-      this.setState({
-        people: [...this.state.people, person],
-        
-      })
-    })
+  }
+  handleChangeName=(event)=> {
+    console.log(this.state.name);
+    this.setState({name: event.target.value});
+  }
+  handleSubmit = (e) =>{
+    e.preventDefault();
+    const newp =this.state.name;
+    console.log("ok")
+    peopleservice.addperson(this.state.name);
+    this.setState({
+      name:'',
+      people:[...this.state.people,newp]
+    });
+    this.componentDidMount();
   }
 
   handleAdopt = (event, type) => {
@@ -69,18 +78,24 @@ class Root extends Component {
         'pet': this.state.onecat, 
         'person': this.state.people[0]
       }
+      peopleservice.dq();
       this.setState({
-        whoAdoptedAnimal: personAndAnimal,
+        whoAdoptedAnimal: [...this.state.whoAdoptedAnimal,personAndAnimal],
         isLoading3: true,
       })
+
     } else {
       personAndAnimal = 
       {
         'pet': this.state.onedog, 
         'person': this.state.people[0]
       }
+      const length =this.state.people.length
+      const newpeople = this.state.people.slice(1,length);
+      peopleservice.dq();
       this.setState({
-        whoAdoptedAnimal: personAndAnimal,
+        people:newpeople,
+        whoAdoptedAnimal: [...this.state.whoAdoptedAnimal,personAndAnimal],
         isLoading3: true,
       })
     }
@@ -95,11 +110,13 @@ class Root extends Component {
   }
 
   getWhoAdopted = () => {
-    console.log(this.state.whoAdoptedAnimal)
-    return (<div>
-    <h3>{this.state.whoAdoptedAnimal.person} adopted {this.state.whoAdoptedAnimal.pet.name}!!</h3>
+    //console.log(this.state.whoAdoptedAnimal)
+    return this.state.whoAdoptedAnimal.map(animalandperson=>{
+    return(<div>
+    <h3>{animalandperson.person} adopted {animalandperson.pet.name}!!</h3>
     </div> 
     )
+    })
   }
 
   allOtherCats = () => {
@@ -125,7 +142,7 @@ class Root extends Component {
 
     <form onSubmit={this.handleSubmit}>
       <h3>Join the Waitlist:</h3>
-      <input className='waitlistInput' type='text'></input> <br />
+      <input value={this.state.name} onChange={this.handleChangeName} className='waitlistInput' type='text'></input> <br />
       <input className='waitlistSubmit' type='submit'></input>
     </form>
 

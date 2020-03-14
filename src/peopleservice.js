@@ -16,6 +16,14 @@ const peopleservice = {
             : res.json()
         })    
     },
+    dq(){
+        return fetch(link,{
+            method:'DELETE',
+            headers:{
+                'content-type':"application/json"
+            }
+        })
+    },
     addperson(person){
         return fetch(link, {
             method: 'POST',
