@@ -59,7 +59,7 @@ class Root extends Component {
     })
   }
 
-  handleDelete = (event, type) => {
+  handleAdopt = (event, type) => {
     event.preventDefault();
     Petservices.deletePet(type);
     let personAndAnimal = {}
@@ -119,18 +119,21 @@ class Root extends Component {
       );
   }
 
-
-
   render(){
   return( <div className='main'>
     <Link to="/" className='Logo'>Petful</Link>
-    <h2>Completed Adoptions</h2>
-    {this.state.isLoading3 ? this.getWhoAdopted() : <div />}
-    <h2>next person to adopt</h2>
+
+    <form onSubmit={this.handleSubmit}>
+      <h3>Join the Waitlist:</h3>
+      <input className='waitlistInput' type='text'></input> <br />
+      <input className='waitlistSubmit' type='submit'></input>
+    </form>
+
+    <h2>Adoption Waitlist</h2>
     {this.state.isLoading2 ? this.getALLPeople() : <div />}
     <section>
       <div className='cat'>
-        <h2>Next Cat In Line for Adoption</h2>
+        <h2>Adopt this Cat!</h2>
         <img src={this.state.onecat.imageURL} alt='Cat Pic'></img>
         <h3>Name: {this.state.onecat.name}</h3>
         <p>Age: {this.state.onecat.age}</p>
@@ -138,14 +141,14 @@ class Root extends Component {
         <p>Description: {this.state.onecat.description}</p>
         <p>Gender: {this.state.onecat.gender}</p>
         <p>Story: {this.state.onecat.story}</p>
-        <button onClick={e => this.handleDelete(e,'cat')}>Adopt</button>
+        <button className='adoptButton' onClick={e => this.handleAdopt(e,'cat')}>Adopt</button>
       </div>
       
     </section>
 
     <section>
       <div className='dog'>
-        <h2>Next Dog In Line for Adoption</h2>
+        <h2>Adopt this Dog!</h2>
         <img src={this.state.onedog.imageURL} alt='Dog Pic'></img>
         <h3>Name: {this.state.onedog.name}</h3>
         <p>Age: {this.state.onedog.age}</p>
@@ -153,9 +156,12 @@ class Root extends Component {
         <p>Description: {this.state.onedog.description}</p>
         <p>Gender: {this.state.onedog.gender}</p>
         <p>Story: {this.state.onedog.story}</p>
-        <button onClick={e => this.handleDelete(e, 'dog')}>Adopt</button>
+        <button className='adoptButton' onClick={e => this.handleAdopt(e, 'dog')}>Adopt</button>
       </div>
     </section>
+
+    <h2>Successful Adoption List:</h2>
+    {this.state.isLoading3 ? this.getWhoAdopted() : <div />}
 
     <h2>All Other Animals In Line for Adoption</h2>
     <div className='otherAnimals'>

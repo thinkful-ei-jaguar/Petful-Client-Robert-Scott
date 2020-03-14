@@ -5,6 +5,26 @@
  font-family: 'Bellota Text';
 }
 
+.cat {
+  background-color: rgb(220, 215, 215);
+  border-radius: 5px;
+  margin: 10%;
+  padding: 1%;
+}
+
+.dog {
+  background-color: rgb(220, 215, 215);
+  border-radius: 5px;
+  margin: 10%;
+  padding: 1%;
+}
+
+.adoptButton {
+  font-size: 25px;
+  border-radius: 5px;
+  padding: 5px 15px 5px 15px ;
+}
+
 .Logo {
   display: flex;
   justify-content: left;
@@ -22,5 +42,11 @@
 
 .otherDogs {
   max-width: 40%;
+}
+
+.waitlistInput {
+  height: 25px;
+  width: 105px;
+  border-radius: 5px;
 }
 
