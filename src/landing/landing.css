@@ -4,17 +4,33 @@
 .main {
   text-align: center;
   font-family: 'Bellota Text';
+  margin: 50px;
+ }
+
+ .mainImg {
+   max-width: 80%;
  }
 
  .Logo {
   font-size: 80px;
-  margin-top: 17px;
-  margin-left: 35px;
+  margin-top: 10px;
+  margin-left: 15px;
   text-align: left;
+  color: black
+}
+
+.Logo :hover {
+  color: goldenrod;
 }
 
 .startButton {
+  text-decoration: none;
+  list-style-type: none;
   font-size: 25px;
   border-radius: 5px;
   padding: 5px 15px 5px 15px ;
+}
+
+.text {
+  max-width: 80%;
 }

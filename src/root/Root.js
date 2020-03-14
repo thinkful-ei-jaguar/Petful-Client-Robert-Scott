@@ -23,16 +23,13 @@ class Root extends Component {
   componentDidMount = () => {
     Petservices.getpets()
     .then(pets => {
-      //console.log(pets);
       this.setState({
         onecat:pets[0],
         onedog:pets[1],
       })
-      //console.log(this.state)
     });
     Petservices.getNextInLineCats()
     .then(cats => {
-      //console.log(cats)
       this.setState({
         cats: cats,
       })
@@ -53,7 +50,6 @@ class Root extends Component {
     });
   }
   handleChangeName=(event)=> {
-    console.log(this.state.name);
     this.setState({name: event.target.value});
   }
   handleSubmit = (e) =>{
@@ -109,9 +105,8 @@ class Root extends Component {
   }
 
   getWhoAdopted = () => {
-    //console.log(this.state.whoAdoptedAnimal)
-    return this.state.whoAdoptedAnimal.map(animalandperson=>{
-    return(<div>
+    return this.state.whoAdoptedAnimal.map((animalandperson, idx)=>{
+    return(<div key={idx}>
     <h3>{animalandperson.person} adopted {animalandperson.pet.name}!!</h3>
     </div> 
     )
@@ -140,8 +135,9 @@ class Root extends Component {
     <Link to="/" className='Logo'>Petful</Link>
 
     <form onSubmit={this.handleSubmit}>
-      <h3>Join the Waitlist:</h3>
-      <input value={this.state.name} onChange={this.handleChangeName} className='waitlistInput' type='text'></input> <br />
+      
+      <label className='joinWaitlist'>Join the Waitlist:
+      <input value={this.state.name} onChange={this.handleChangeName} className='waitlistInput' type='text'></input></label>
       <input className='waitlistSubmit' type='submit'></input>
     </form>
 
@@ -150,7 +146,7 @@ class Root extends Component {
     <section>
       <div className='cat'>
         <h2>Adopt this Cat!</h2>
-        <img src={this.state.onecat.imageURL} alt='Cat Pic'></img>
+        <img className='singleCatImg'src={this.state.onecat.imageURL} alt='Cat Pic'></img>
         <h3>Name: {this.state.onecat.name}</h3>
         <p>Age: {this.state.onecat.age}</p>
         <p>Breed: {this.state.onecat.breed}</p>
@@ -159,13 +155,13 @@ class Root extends Component {
         <p>Story: {this.state.onecat.story}</p>
         {this.state.people.length ? <button className='adoptButton' onClick={e => this.handleAdopt(e,'cat')}>Adopt</button> : <div />}
       </div>
-      
+
     </section>
 
     <section>
       <div className='dog'>
         <h2>Adopt this Dog!</h2>
-        <img src={this.state.onedog.imageURL} alt='Dog Pic'></img>
+        <img className='singleDogImg' src={this.state.onedog.imageURL} alt='Dog Pic'></img>
         <h3>Name: {this.state.onedog.name}</h3>
         <p>Age: {this.state.onedog.age}</p>
         <p>Breed: {this.state.onedog.breed}</p>
@@ -179,7 +175,7 @@ class Root extends Component {
     <h2>Successful Adoption List:</h2>
     {this.state.isLoading3 ? this.getWhoAdopted() : <div />}
 
-    <h2>All Other Animals In Line for Adoption</h2>
+    <h2>All Other Animals In Line for Adoption:</h2>
     <div className='otherAnimals'>
       {this.state.isLoading ? this.allOtherCats() : <div />}
       {this.state.isLoading ? this.allOtherDogs() : <div /> }

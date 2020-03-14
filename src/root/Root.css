@@ -19,6 +19,18 @@
   padding: 1%;
 }
 
+.singleCatImg{
+  max-width: 60%;
+}
+
+.singleDogImg {
+  max-width: 60%;
+}
+
+.joinWaitlist {
+  font-size: 30px;
+}
+
 .adoptButton {
   font-size: 25px;
   border-radius: 5px;
@@ -45,8 +57,15 @@
 }
 
 .waitlistInput {
+  margin: 15px;
   height: 25px;
   width: 105px;
   border-radius: 5px;
+}
+
+.waitlistSubmit {
+  padding: 5px 10px 5px 10px;
+  border-radius: 5px;
+
 }
 
