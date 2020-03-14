@@ -3,7 +3,7 @@
 ### Live Link 
 https://petful.ralexblue.now.sh
 
-### Live Link 
+### Server Link 
 https://github.com/thinkful-ei-jaguar/Petful-Server-Robert-Scott
 
 ### Project Collaborators
