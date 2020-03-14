@@ -1,0 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Bellota+Text:wght@300;400&display=swap');
+
+
+.main {
+  text-align: center;
+  font-family: 'Bellota Text';
+ }
+
+ .Logo {
+  font-size: 80px;
+  margin-top: 17px;
+  margin-left: 35px;
+  text-align: left;
+}
+
+.startButton {
+  font-size: 25px;
+  border-radius: 5px;
+  padding: 5px 15px 5px 15px ;
+}

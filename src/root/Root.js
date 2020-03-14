@@ -1,6 +1,8 @@
-import React, { Component } from 'react'
-import Petservices from "../Petservices"
-import peopleservice from '../peopleservice'
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom'
+import Petservices from '../Petservices';
+import peopleservice from '../peopleservice';
+import './Root.css';
 class Root extends Component {
   constructor(props){
     super(props);
@@ -10,8 +12,10 @@ class Root extends Component {
       onecat: {},
       onedog:{},
       isLoading: false,
-      isLoading2:false,
-      people:[]
+      isLoading2: false,
+      isLoading3: false,
+      people:[],
+      whoAdoptedAnimal: [],
     }
   }
 
@@ -45,45 +49,83 @@ class Root extends Component {
         people:peoples,
         isLoading2: true,
       })
+    });
+    peopleservice.addperson()
+    .then(person => {
+      this.setState({
+        people: [...this.state.people, person],
+        
+      })
     })
-    
   }
 
   handleDelete = (event, type) => {
     event.preventDefault();
-    Petservices.deletePet(type)
+    Petservices.deletePet(type);
+    let personAndAnimal = {}
+    if(type === 'cat') {
+      personAndAnimal = 
+      {
+        'pet': this.state.onecat, 
+        'person': this.state.people[0]
+      }
+      this.setState({
+        whoAdoptedAnimal: personAndAnimal,
+        isLoading3: true,
+      })
+    } else {
+      personAndAnimal = 
+      {
+        'pet': this.state.onedog, 
+        'person': this.state.people[0]
+      }
+      this.setState({
+        whoAdoptedAnimal: personAndAnimal,
+        isLoading3: true,
+      })
+    }
     this.componentDidMount();
   }
 
-  getALLPeople =() =>{
-    return this.state.people.map(people => <div>
-      <h3>next: {people}</h3>
+  getALLPeople = () => {
+    return this.state.people.map((people, idx) => <div key={idx}>
+      <h3 >{people}</h3>
     </div>
     )
   }
 
+  getWhoAdopted = () => {
+    console.log(this.state.whoAdoptedAnimal)
+    return (<div>
+    <h3>{this.state.whoAdoptedAnimal.person} adopted {this.state.whoAdoptedAnimal.pet.name}!!</h3>
+    </div> 
+    )
+  }
 
   allOtherCats = () => {
-    return this.state.cats.map(cat => <div>
-          <img src={cat.imageURL} alt='Cat Pic'></img>
+    return this.state.cats.map((cat, idx) => <div key={idx}>
+          <img className='otherCats' src={cat.imageURL} alt='Cat Pic'></img>
           <h3>Name: {cat.name}</h3>
         </div>
     )
   }
 
   allOtherDogs = () => {
-    return this.state.dogs.map(dog => 
-        <div>
-          <img src={dog.imageURL} alt='Dog Pic'></img>
+    return this.state.dogs.map((dog, idx) => 
+        <div key={idx}>
+          <img className='otherDogs'src={dog.imageURL} alt='Dog Pic'></img>
           <h3>Name: {dog.name}</h3>
         </div>
       );
-    
   }
 
+
+
   render(){
-  return( <div>
-    <h1>Petful</h1>
+  return( <div className='main'>
+    <Link to="/" className='Logo'>Petful</Link>
+    <h2>Completed Adoptions</h2>
+    {this.state.isLoading3 ? this.getWhoAdopted() : <div />}
     <h2>next person to adopt</h2>
     {this.state.isLoading2 ? this.getALLPeople() : <div />}
     <section>
@@ -116,10 +158,10 @@ class Root extends Component {
     </section>
 
     <h2>All Other Animals In Line for Adoption</h2>
-
-    {this.state.isLoading ? this.allOtherCats() : <div />}
-    {this.state.isLoading ? this.allOtherDogs() : <div /> }
-   
+    <div className='otherAnimals'>
+      {this.state.isLoading ? this.allOtherCats() : <div />}
+      {this.state.isLoading ? this.allOtherDogs() : <div /> }
+    </div>
   </div>
   )
   }

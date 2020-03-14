@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Bellota+Text:wght@300;400&display=swap');
+
+.main {
+ text-align: center;
+ font-family: 'Bellota Text';
+}
+
+.Logo {
+  display: flex;
+  justify-content: left;
+  color: black;
+  text-decoration: none;
+  list-style-type: none;
+  font-size: 80px;
+  margin-top: 17px;
+  margin-left: 35px;
+}
+
+.otherCats {
+  max-width: 40%;
+}
+
+.otherDogs {
+  max-width: 40%;
+}
+

@@ -43,7 +43,6 @@ const PetService = {
         })   
     },
     deletePet(breed){
-
         return fetch(link, {
             method: 'DELETE',
             headers: {
