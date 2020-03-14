@@ -73,12 +73,14 @@ class Root extends Component {
         'pet': this.state.onecat, 
         'person': this.state.people[0]
       }
+      const length =this.state.people.length
+      const newpeople = this.state.people.slice(1,length);
       peopleservice.dq();
       this.setState({
-        whoAdoptedAnimal: [...this.state.whoAdoptedAnimal,personAndAnimal],
+        people: newpeople,
+        whoAdoptedAnimal: [...this.state.whoAdoptedAnimal, personAndAnimal],
         isLoading3: true,
       })
-
     } else {
       personAndAnimal = 
       {
