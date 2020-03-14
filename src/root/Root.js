@@ -59,7 +59,6 @@ class Root extends Component {
   handleSubmit = (e) =>{
     e.preventDefault();
     const newp =this.state.name;
-    console.log("ok")
     peopleservice.addperson(this.state.name);
     this.setState({
       name:'',
@@ -158,7 +157,7 @@ class Root extends Component {
         <p>Description: {this.state.onecat.description}</p>
         <p>Gender: {this.state.onecat.gender}</p>
         <p>Story: {this.state.onecat.story}</p>
-        <button className='adoptButton' onClick={e => this.handleAdopt(e,'cat')}>Adopt</button>
+        {this.state.people.length ? <button className='adoptButton' onClick={e => this.handleAdopt(e,'cat')}>Adopt</button> : <div />}
       </div>
       
     </section>
@@ -173,7 +172,7 @@ class Root extends Component {
         <p>Description: {this.state.onedog.description}</p>
         <p>Gender: {this.state.onedog.gender}</p>
         <p>Story: {this.state.onedog.story}</p>
-        <button className='adoptButton' onClick={e => this.handleAdopt(e, 'dog')}>Adopt</button>
+        {this.state.people.length ?<button className='adoptButton' onClick={e => this.handleAdopt(e, 'dog')}>Adopt</button> : <div />}
       </div>
     </section>
 
