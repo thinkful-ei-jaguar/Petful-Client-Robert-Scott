@@ -18,6 +18,8 @@ class Root extends Component {
       isLoading3: false,
       people:[],
       whoAdoptedAnimal: [],
+      interval1:null,
+      aretherepeople:false,
     }
   }
 
@@ -47,11 +49,45 @@ class Root extends Component {
       this.setState({
         people: peoples,
         isLoading2: true,
-      })
+      }) 
     });
     this.every5seconds();
   }
- 
+  updateState =()=>{
+    Petservices.getpets()
+    .then(pets => {
+      this.setState({
+        onecat: pets[0],
+        onedog: pets[1],
+      })
+    });
+    Petservices.getNextInLineCats()
+    .then(cats => {
+      this.setState({
+        cats: cats,
+      })
+    });
+    Petservices.getNextInLineDogs()
+    .then(dogs => {
+      this.setState({
+        dogs: dogs,
+        isLoading: true,
+      })
+    });
+    peopleservice.getpeople()
+    .then(peoples => {
+      this.setState({
+        people: peoples,
+        isLoading2: true,
+      }) 
+      if(this.state.people==[]){
+        this.setState({
+          aretherepeople:true
+        })
+      }
+    });
+  }
+
   handleChangeName = (event) => {
     this.setState({name: event.target.value});
   }
@@ -64,7 +100,7 @@ class Root extends Component {
       name: '',
       people:[...this.state.people,newp]
     });
-    this.componentDidMount();
+    this.updateState();
   }
 
   handleAdopt = (type) => {
@@ -77,7 +113,10 @@ class Root extends Component {
         'pet': this.state.onecat, 
         'person': this.state.people[0]
       }
-      const length = this.state.people.length
+      const length = this.state.people;
+      if(length==0){
+        return
+      }
       const newpeople = this.state.people.slice(1,length);
       peopleservice.dq();
       this.setState({
@@ -92,6 +131,9 @@ class Root extends Component {
         'person': this.state.people[0]
       }
       const length = this.state.people.length
+      if(length==0){
+        return
+      }
       const newpeople = this.state.people.slice(1,length);
       peopleservice.dq();
       this.setState({
@@ -100,9 +142,8 @@ class Root extends Component {
         isLoading3: true,
       })
     }
-    // this.componentDidMount();
+    this.updateState();
   }
-
   callAdoptInEvery5 = () => {
       let pet = Math.floor(Math.random() * 2); 
       //console.log(pet);
@@ -116,17 +157,14 @@ class Root extends Component {
         console.log(pettype)
         this.handleAdopt('dog')
       }
-      // if(this.state.iAmUser){
-      //   clearInterval()
-      // }
-      // this.handleAdopt(pettype);
   }
 
   every5seconds = () =>{
    let add = setInterval(this.callAdoptInEvery5, 5000);
 
-  //  clearInterval(add);
-
+   if(this.state.aretherepeople){
+      clearInterval(add)
+    }
   }
 
   add5people=()=>{
