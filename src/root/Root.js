@@ -12,6 +12,7 @@ class Root extends Component {
       onecat: {},
       onedog:{},
       name:'',
+      iAmUser:false,
       isLoading: false,
       isLoading2: false,
       isLoading3: false,
@@ -48,6 +49,27 @@ class Root extends Component {
         isLoading2: true,
       })
     });
+    //this.every5seconds();
+  }
+
+  every5seconds=(e)=>{
+    e.preventDefault();
+    var deletepeople=setInterval(
+      function(){ 
+        var pet=Math.floor(Math.random() * 2); 
+        console.log(pet);
+        if(pet===1){
+          this.handleAdopt(e,'cat')
+        }else{
+          this.handleAdopt(e,'dog')
+        }
+      }, 5000);
+      if(this.state.iAmUser){
+        clearInterval(deletepeople)
+    }
+  }
+  add5people=()=>{
+
   }
   handleChangeName=(event)=> {
     this.setState({name: event.target.value});
