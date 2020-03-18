@@ -295,7 +295,7 @@ every5seconds2 = () => {
         <p>Description: {this.state.onecat.description}</p>
         <p>Gender: {this.state.onecat.gender}</p>
         <p>Story: {this.state.onecat.story}</p>
-        {this.state.iAmUser ? <button className='adoptButton' onClick={() => this.handleAdoptforuser('cat')}>Adopt</button> : <div />}
+        {(this.state.iAmUser &&this.state.people[0]===this.state.iamthisperson ) ? <button className='adoptButton' onClick={() => this.handleAdoptforuser('cat')}>Adopt</button> : <div />}
       </div>
 
     </section>
@@ -310,7 +310,7 @@ every5seconds2 = () => {
         <p>Description: {this.state.onedog.description}</p>
         <p>Gender: {this.state.onedog.gender}</p>
         <p>Story: {this.state.onedog.story}</p>
-        {this.state.iAmUser ?<button className='adoptButton' onClick={e => this.handleAdoptforuser(e, 'dog')}>Adopt</button> : <div />}
+        {(this.state.iAmUser &&this.state.people[0]===this.state.iamthisperson ) ?<button className='adoptButton' onClick={e => this.handleAdoptforuser(e, 'dog')}>Adopt</button> : <div />}
       </div>
     </section>
 
