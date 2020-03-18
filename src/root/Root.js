@@ -56,6 +56,7 @@ class Root extends Component {
       interval1: this.every5seconds(),
     })
   }
+
   updateState = () => {
     Petservices.getpets()
     .then(pets => {
@@ -103,6 +104,7 @@ class Root extends Component {
       name: '',
       people:[...this.state.people,newp],
       iAmUser:true,
+      interval2: this.every5seconds2(),
     });
     this.updateState();
     //this.add5people();
@@ -171,8 +173,12 @@ class Root extends Component {
     }
   }
 callNewPersonInEvery5 = () => {
-    peopleservice.addperson("joe lol");
-    this.updateState();
+    if(this.state.people.length < 5) {
+      peopleservice.addperson("joe lol");
+      this.updateState();
+    } else {
+      return;
+    }
 }
 
 every5seconds2 = () => {
