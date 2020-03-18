@@ -131,8 +131,8 @@ class Root extends Component {
         'person': this.state.people[0]
       }
       const length = this.state.people.length
-      if(length==0){
-        return
+      if(length == 0){
+        return;
       }
       const newpeople = this.state.people.slice(1,length);
       peopleservice.dq();
@@ -150,11 +150,9 @@ class Root extends Component {
       let pettype;
       if(pet === 1) {
         pettype='cat';
-        console.log(pettype)
         this.handleAdopt('cat')
       } else {
         pettype = 'dog';
-        console.log(pettype)
         this.handleAdopt('dog')
       }
   }
