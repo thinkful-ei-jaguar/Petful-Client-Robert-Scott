@@ -49,11 +49,10 @@ class Root extends Component {
         isLoading2: true,
       })
     });
-    this.every5seconds();
+    // this.every5seconds();
   }
-
  
-  handleChangeName=(event)=> {
+  handleChangeName = (event) => {
     this.setState({name: event.target.value});
   }
   handleSubmit = (e) =>{
@@ -67,8 +66,8 @@ class Root extends Component {
     this.componentDidMount();
   }
 
-  handleAdopt = (event, type) => {
-    event.preventDefault();
+  handleAdopt = (type) => {
+    // event.preventDefault();
     Petservices.deletePet(type);
     let personAndAnimal = {}
     if(type === 'cat') {
@@ -91,7 +90,7 @@ class Root extends Component {
         'pet': this.state.onedog, 
         'person': this.state.people[0]
       }
-      const length =this.state.people.length
+      const length = this.state.people.length
       const newpeople = this.state.people.slice(1,length);
       peopleservice.dq();
       this.setState({
@@ -103,23 +102,23 @@ class Root extends Component {
     this.componentDidMount();
   }
   every5seconds = () =>{
-    var deletepeople=setInterval(
+    let deletepeople = setInterval(
       function(){ 
-        var pet=Math.floor(Math.random() * 2); 
+        let pet = Math.floor(Math.random() * 2); 
         //console.log(pet);
         let pettype;
         if(pet===1){
           pettype='cat';
           console.log(pettype)
-          //this.handleAdopt('cat')
+          // this.handleAdopt('cat')
         }else{
           pettype='dog';
           console.log(pettype)
-          //this.handleAdopt('dog')
+          // this.handleAdopt('dog')
         }
-        //this.handleAdopt(e,pettype);
+        // this.handleAdopt(pettype);
       }, 5000);
-      //this.handleAdopt('dog');
+      // this.handleAdopt('dog');
 
       if(this.state.iAmUser){
         clearInterval(deletepeople)
@@ -186,7 +185,7 @@ class Root extends Component {
         <p>Description: {this.state.onecat.description}</p>
         <p>Gender: {this.state.onecat.gender}</p>
         <p>Story: {this.state.onecat.story}</p>
-        {this.state.people.length ? <button className='adoptButton' onClick={e => this.handleAdopt(e,'cat')}>Adopt</button> : <div />}
+        {this.state.people.length ? <button className='adoptButton' onClick={() => this.handleAdopt('cat')}>Adopt</button> : <div />}
       </div>
 
     </section>
