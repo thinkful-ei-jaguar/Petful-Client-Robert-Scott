@@ -49,28 +49,10 @@ class Root extends Component {
         isLoading2: true,
       })
     });
-    //this.every5seconds();
+    this.every5seconds();
   }
 
-  every5seconds=(e)=>{
-    e.preventDefault();
-    var deletepeople=setInterval(
-      function(){ 
-        var pet=Math.floor(Math.random() * 2); 
-        console.log(pet);
-        if(pet===1){
-          this.handleAdopt(e,'cat')
-        }else{
-          this.handleAdopt(e,'dog')
-        }
-      }, 5000);
-      if(this.state.iAmUser){
-        clearInterval(deletepeople)
-    }
-  }
-  add5people=()=>{
-
-  }
+ 
   handleChangeName=(event)=> {
     this.setState({name: event.target.value});
   }
@@ -119,6 +101,33 @@ class Root extends Component {
       })
     }
     this.componentDidMount();
+  }
+  every5seconds = () =>{
+    var deletepeople=setInterval(
+      function(){ 
+        var pet=Math.floor(Math.random() * 2); 
+        //console.log(pet);
+        let pettype;
+        if(pet===1){
+          pettype='cat';
+          console.log(pettype)
+          //this.handleAdopt('cat')
+        }else{
+          pettype='dog';
+          console.log(pettype)
+          //this.handleAdopt('dog')
+        }
+        //this.handleAdopt(e,pettype);
+      }, 5000);
+      //this.handleAdopt('dog');
+
+      if(this.state.iAmUser){
+        clearInterval(deletepeople)
+    }
+
+  }
+  add5people=()=>{
+
   }
 
   getALLPeople = () => {
