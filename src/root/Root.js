@@ -13,7 +13,7 @@ class Root extends Component {
       onedog:{},
       name:'',
       iamthisperson:'',
-      iAmUser:false,
+      iAmUser: false,
       isLoading: false,
       isLoading2: false,
       isLoading3: false,
@@ -67,10 +67,14 @@ class Root extends Component {
       })
     });
     Petservices.getNextInLineCats()
-    .then(cats => {
-      this.setState({
-        cats: cats,
-      })
+      .then(cats => {
+        this.setState({
+          cats: cats,
+          isLoading: true,
+        })
+        if(this.state.cats == []) {
+          return;
+        }
     });
     Petservices.getNextInLineDogs()
     .then(dogs => {
@@ -78,6 +82,9 @@ class Root extends Component {
         dogs: dogs,
         isLoading: true,
       })
+      if(this.state.dogs == []) {
+        return;
+      }
     });
     peopleservice.getpeople()
     .then(peoples => {
@@ -109,10 +116,8 @@ class Root extends Component {
       interval2: this.every5seconds2(),
     });
 
-
     this.updateState();
-    //this.add5people();
-    //this.every5seconds();
+
   }
 
 
@@ -163,11 +168,8 @@ class Root extends Component {
     this.updateState();
   }
 
-
-
   handleAdopt = (type) => {
     // event.preventDefault();
-   
     let personAndAnimal = {}
     if(type === 'cat') {
       personAndAnimal = 
@@ -286,6 +288,7 @@ every5seconds2 = () => {
     <h2>Adoption Waitlist</h2>
     {this.state.isLoading2 ? this.getALLPeople() : <div />}
     <section>
+      {this.state.cats === [] ? <p>No More Catz</p> :
       <div className='cat'>
         <h2>Adopt this Cat!</h2>
         <img className='singleCatImg'src={this.state.onecat.imageURL} alt='Cat Pic'></img>
@@ -295,12 +298,13 @@ every5seconds2 = () => {
         <p>Description: {this.state.onecat.description}</p>
         <p>Gender: {this.state.onecat.gender}</p>
         <p>Story: {this.state.onecat.story}</p>
-        {(this.state.iAmUser &&this.state.people[0]===this.state.iamthisperson ) ? <button className='adoptButton' onClick={() => this.handleAdoptforuser('cat')}>Adopt</button> : <div />}
+        {(this.state.iAmUser && this.state.people[0] === this.state.iamthisperson ) ? <button className='adoptButton' onClick = {() => this.handleAdoptforuser('cat')}>Adopt</button> : <div />}
       </div>
-
+    }
     </section>
 
     <section>
+    {this.state.dogs === [] ? <p>No More Dogz</p> :
       <div className='dog'>
         <h2>Adopt this Dog!</h2>
         <img className='singleDogImg' src={this.state.onedog.imageURL} alt='Dog Pic'></img>
@@ -312,6 +316,7 @@ every5seconds2 = () => {
         <p>Story: {this.state.onedog.story}</p>
         {(this.state.iAmUser &&this.state.people[0]===this.state.iamthisperson ) ?<button className='adoptButton' onClick={e => this.handleAdoptforuser(e, 'dog')}>Adopt</button> : <div />}
       </div>
+    }
     </section>
 
     <h2>Successful Adoption List:</h2>
