@@ -25,8 +25,8 @@ class Root extends Component {
     Petservices.getpets()
     .then(pets => {
       this.setState({
-        onecat:pets[0],
-        onedog:pets[1],
+        onecat: pets[0],
+        onedog: pets[1],
       })
     });
     Petservices.getNextInLineCats()
@@ -43,24 +43,25 @@ class Root extends Component {
       })
     });
     peopleservice.getpeople()
-    .then(peoples=>{
+    .then(peoples => {
       this.setState({
-        people:peoples,
+        people: peoples,
         isLoading2: true,
       })
     });
-    // this.every5seconds();
+    this.every5seconds();
   }
  
   handleChangeName = (event) => {
     this.setState({name: event.target.value});
   }
+
   handleSubmit = (e) =>{
     e.preventDefault();
-    const newp =this.state.name;
+    const newp = this.state.name;
     peopleservice.addperson(this.state.name);
     this.setState({
-      name:'',
+      name: '',
       people:[...this.state.people,newp]
     });
     this.componentDidMount();
@@ -76,7 +77,7 @@ class Root extends Component {
         'pet': this.state.onecat, 
         'person': this.state.people[0]
       }
-      const length =this.state.people.length
+      const length = this.state.people.length
       const newpeople = this.state.people.slice(1,length);
       peopleservice.dq();
       this.setState({
@@ -99,32 +100,35 @@ class Root extends Component {
         isLoading3: true,
       })
     }
-    this.componentDidMount();
+    // this.componentDidMount();
   }
+
+  callAdoptInEvery5 = () => {
+      let pet = Math.floor(Math.random() * 2); 
+      //console.log(pet);
+      let pettype;
+      if(pet === 1) {
+        pettype='cat';
+        console.log(pettype)
+        this.handleAdopt('cat')
+      } else {
+        pettype = 'dog';
+        console.log(pettype)
+        this.handleAdopt('dog')
+      }
+      // if(this.state.iAmUser){
+      //   clearInterval()
+      // }
+      // this.handleAdopt(pettype);
+  }
+
   every5seconds = () =>{
-    let deletepeople = setInterval(
-      function(){ 
-        let pet = Math.floor(Math.random() * 2); 
-        //console.log(pet);
-        let pettype;
-        if(pet===1){
-          pettype='cat';
-          console.log(pettype)
-          // this.handleAdopt('cat')
-        }else{
-          pettype='dog';
-          console.log(pettype)
-          // this.handleAdopt('dog')
-        }
-        // this.handleAdopt(pettype);
-      }, 5000);
-      // this.handleAdopt('dog');
+   let add = setInterval(this.callAdoptInEvery5, 5000);
 
-      if(this.state.iAmUser){
-        clearInterval(deletepeople)
-    }
+  //  clearInterval(add);
 
   }
+
   add5people=()=>{
 
   }
