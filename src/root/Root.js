@@ -12,6 +12,7 @@ class Root extends Component {
       onecat: {},
       onedog:{},
       name:'',
+      iamthisperson:'',
       iAmUser:false,
       isLoading: false,
       isLoading2: false,
@@ -102,19 +103,27 @@ class Root extends Component {
     peopleservice.addperson(this.state.name);
     this.setState({
       name: '',
+      iamthisperson:newp,
       people:[...this.state.people,newp],
       iAmUser:true,
       interval2: this.every5seconds2(),
     });
+
+
     this.updateState();
     //this.add5people();
     //this.every5seconds();
   }
 
-  handleAdopt = (type) => {
-    // event.preventDefault();
-    Petservices.deletePet(type);
+
+  handleAdoptforuser = (type) => {
     let personAndAnimal = {}
+    if(this.state.people[0]==this.state.iamthisperson){
+      this.setState({
+        iAmUser:false,
+        iamthisperson:'',
+      })
+    }
     if(type === 'cat') {
       personAndAnimal = 
       {
@@ -122,7 +131,7 @@ class Root extends Component {
         'person': this.state.people[0]
       }
       const length = this.state.people;
-      if(length === 0) {
+      if(length == 0 || this.state.people[0]==this.state.iamthisperson) {
         return;
       }
       const newpeople = this.state.people.slice(1,length);
@@ -139,7 +148,7 @@ class Root extends Component {
         'person': this.state.people[0]
       }
       const length = this.state.people.length
-      if(length === 0) {
+      if(length == 0 || this.state.people[0]==this.state.iamthisperson) {
         return;
       }
       const newpeople = this.state.people.slice(1,length);
@@ -150,6 +159,52 @@ class Root extends Component {
         isLoading3: true,
       })
     }
+    Petservices.deletePet(type);
+    this.updateState();
+  }
+
+
+
+  handleAdopt = (type) => {
+    // event.preventDefault();
+   
+    let personAndAnimal = {}
+    if(type === 'cat') {
+      personAndAnimal = 
+      {
+        'pet': this.state.onecat, 
+        'person': this.state.people[0]
+      }
+      const length = this.state.people;
+      if(length == 0 || this.state.people[0]==this.state.iamthisperson) {
+        return;
+      }
+      const newpeople = this.state.people.slice(1,length);
+      peopleservice.dq();
+      this.setState({
+        people: newpeople,
+        whoAdoptedAnimal: [...this.state.whoAdoptedAnimal, personAndAnimal],
+        isLoading3: true,
+      })
+    } else {
+      personAndAnimal = 
+      {
+        'pet': this.state.onedog, 
+        'person': this.state.people[0]
+      }
+      const length = this.state.people.length
+      if(length == 0 || this.state.people[0]==this.state.iamthisperson) {
+        return;
+      }
+      const newpeople = this.state.people.slice(1,length);
+      peopleservice.dq();
+      this.setState({
+        people:newpeople,
+        whoAdoptedAnimal: [...this.state.whoAdoptedAnimal,personAndAnimal],
+        isLoading3: true,
+      })
+    }
+    Petservices.deletePet(type);
     this.updateState();
   }
   callAdoptInEvery5 = () => {
@@ -157,7 +212,7 @@ class Root extends Component {
       //console.log(pet);
       let petType;
       if(pet === 1) {
-        petType='cat';
+        petType ='cat';
         this.handleAdopt('cat')
       } else {
         petType = 'dog';
@@ -173,7 +228,7 @@ class Root extends Component {
     }
   }
 callNewPersonInEvery5 = () => {
-    if(this.state.people.length < 5) {
+    if(this.state.people.length < 5&& this.state.people[0]===this.state.iamthisperson) {
       peopleservice.addperson("joe lol");
       this.updateState();
     } else {
@@ -240,7 +295,7 @@ every5seconds2 = () => {
         <p>Description: {this.state.onecat.description}</p>
         <p>Gender: {this.state.onecat.gender}</p>
         <p>Story: {this.state.onecat.story}</p>
-        {this.state.iAmUser ? <button className='adoptButton' onClick={() => this.handleAdopt('cat')}>Adopt</button> : <div />}
+        {this.state.iAmUser ? <button className='adoptButton' onClick={() => this.handleAdoptforuser('cat')}>Adopt</button> : <div />}
       </div>
 
     </section>
@@ -255,7 +310,7 @@ every5seconds2 = () => {
         <p>Description: {this.state.onedog.description}</p>
         <p>Gender: {this.state.onedog.gender}</p>
         <p>Story: {this.state.onedog.story}</p>
-        {this.state.iAmUser ?<button className='adoptButton' onClick={e => this.handleAdopt(e, 'dog')}>Adopt</button> : <div />}
+        {this.state.iAmUser ?<button className='adoptButton' onClick={e => this.handleAdoptforuser(e, 'dog')}>Adopt</button> : <div />}
       </div>
     </section>
 
