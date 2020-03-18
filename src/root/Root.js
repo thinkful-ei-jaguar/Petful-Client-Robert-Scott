@@ -19,6 +19,7 @@ class Root extends Component {
       people:[],
       whoAdoptedAnimal: [],
       interval1:null,
+      interval2: null,
       aretherepeople:false,
     }
   }
@@ -51,10 +52,11 @@ class Root extends Component {
         isLoading2: true,
       }) 
     });
-    this.every5seconds();
-    this.every5seconds2();
+    this.setState({
+      interval1: this.every5seconds(),
+    })
   }
-  updateState =()=>{
+  updateState = () => {
     Petservices.getpets()
     .then(pets => {
       this.setState({
@@ -81,7 +83,7 @@ class Root extends Component {
         people: peoples,
         isLoading2: true,
       }) 
-      if(this.state.people==[]){
+      if(this.state.people == []){
         this.setState({
           aretherepeople:true
         })
@@ -118,8 +120,8 @@ class Root extends Component {
         'person': this.state.people[0]
       }
       const length = this.state.people;
-      if(length==0){
-        return
+      if(length === 0) {
+        return;
       }
       const newpeople = this.state.people.slice(1,length);
       peopleservice.dq();
@@ -135,7 +137,7 @@ class Root extends Component {
         'person': this.state.people[0]
       }
       const length = this.state.people.length
-      if(length == 0){
+      if(length === 0) {
         return;
       }
       const newpeople = this.state.people.slice(1,length);
@@ -151,31 +153,30 @@ class Root extends Component {
   callAdoptInEvery5 = () => {
       let pet = Math.floor(Math.random() * 2); 
       //console.log(pet);
-      let pettype;
+      let petType;
       if(pet === 1) {
-        pettype='cat';
+        petType='cat';
         this.handleAdopt('cat')
       } else {
-        pettype = 'dog';
+        petType = 'dog';
         this.handleAdopt('dog')
       }
   }
 
-  every5seconds = () =>{
+  every5seconds = () => {
    let add = setInterval(this.callAdoptInEvery5, 5000);
 
    if(this.state.aretherepeople){
       clearInterval(add)
     }
   }
-callnewpersonInEvery5 = () => {
+callNewPersonInEvery5 = () => {
     peopleservice.addperson("joe lol");
     this.updateState();
 }
 
-every5seconds2 = () =>{
- let add2 = setInterval(this.callnewpersonInEvery5, 6000);
-
+every5seconds2 = () => {
+ let add2 = setInterval(this.callNewPersonInEvery5, 6000);
 }
   getALLPeople = () => {
     return this.state.people.map((people, idx) => <div key={idx}>
