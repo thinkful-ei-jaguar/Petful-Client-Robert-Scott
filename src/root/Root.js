@@ -52,6 +52,7 @@ class Root extends Component {
       }) 
     });
     this.every5seconds();
+    this.every5seconds2();
   }
   updateState =()=>{
     Petservices.getpets()
@@ -98,9 +99,12 @@ class Root extends Component {
     peopleservice.addperson(this.state.name);
     this.setState({
       name: '',
-      people:[...this.state.people,newp]
+      people:[...this.state.people,newp],
+      iAmUser:true,
     });
     this.updateState();
+    //this.add5people();
+    //this.every5seconds();
   }
 
   handleAdopt = (type) => {
@@ -164,11 +168,15 @@ class Root extends Component {
       clearInterval(add)
     }
   }
+callnewpersonInEvery5 = () => {
+    peopleservice.addperson("joe lol");
+    this.updateState();
+}
 
-  add5people=()=>{
+every5seconds2 = () =>{
+ let add2 = setInterval(this.callnewpersonInEvery5, 6000);
 
-  }
-
+}
   getALLPeople = () => {
     return this.state.people.map((people, idx) => <div key={idx}>
       <h3 >{people}</h3>
@@ -225,7 +233,7 @@ class Root extends Component {
         <p>Description: {this.state.onecat.description}</p>
         <p>Gender: {this.state.onecat.gender}</p>
         <p>Story: {this.state.onecat.story}</p>
-        {this.state.people.length ? <button className='adoptButton' onClick={() => this.handleAdopt('cat')}>Adopt</button> : <div />}
+        {this.state.iAmUser ? <button className='adoptButton' onClick={() => this.handleAdopt('cat')}>Adopt</button> : <div />}
       </div>
 
     </section>
@@ -240,7 +248,7 @@ class Root extends Component {
         <p>Description: {this.state.onedog.description}</p>
         <p>Gender: {this.state.onedog.gender}</p>
         <p>Story: {this.state.onedog.story}</p>
-        {this.state.people.length ?<button className='adoptButton' onClick={e => this.handleAdopt(e, 'dog')}>Adopt</button> : <div />}
+        {this.state.iAmUser ?<button className='adoptButton' onClick={e => this.handleAdopt(e, 'dog')}>Adopt</button> : <div />}
       </div>
     </section>
 
