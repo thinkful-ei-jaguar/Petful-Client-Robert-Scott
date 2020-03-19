@@ -79,7 +79,7 @@ class Root extends Component {
           cats: cats,
           isLoading: true,
         })
-        if(cats===[]) {
+        if(!this.state.cats.length) {
           this.setState({
             nomorecats:true,
           })
@@ -91,7 +91,7 @@ class Root extends Component {
         dogs: dogs,
         isLoading: true,
       })
-      if(dogs === []) {
+      if(!this.state.dogs.length) {
         this.setState({
           nomoredogs:true,
         })
@@ -292,6 +292,8 @@ getAllPeople = () => {
   }
 
   render(){
+    let nomorecats=this.state.nomorecats;
+    let nomoredogs =this.state.nomoredogs;
   return( 
   <div className='main'>
     <Link to="/" className='Logo'>Petful</Link>
@@ -304,7 +306,7 @@ getAllPeople = () => {
 
     <h2>Adoption Waitlist: </h2>
     {this.state.isLoading2 ? this.getAllPeople() : <div />}
-    {this.state.nomorecats ? <p>No More Catz</p> :
+    {nomorecats? <p>No More Catz</p> :
     <section>
       <div className='cat'>
         <h2>Adopt this Cat!</h2>
@@ -322,7 +324,7 @@ getAllPeople = () => {
     </section>
     }
 
-    {this.state.nomoredogs ? <p>No More Dogz</p> :
+    {nomoredogs ? <p>No More Dogz</p> :
     <section>
       <div className='dog'>
         <h2>Adopt this Dog!</h2>
