@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import Petservices from '../Petservices';
@@ -66,28 +67,28 @@ class Root extends Component {
   }
 
    updateState = () => {
-     Petservices.getpets()
+    Petservices.getpets()
     .then(pets => {
-      if(pets.length==2){
-      this.setState({
-        onecat: pets[0],
-        onedog: pets[1],
-      })
-    }
-    else if(pets.length==1 && !this.state.cats.length){
+      if(pets.length == 2){
         this.setState({
-          onedog: pets[0],
-          onecat:{},
+          onecat: pets[0],
+          onedog: pets[1],
         })
-    }
-    else if(pets.length==1 && !this.state.dogs.length){
-      this.setState({
-        onecat: pets[0],
-        onedog:{},
-      })
-  }
-
+      }
+      else if(pets.length == 1 && !this.state.cats.length) {
+          this.setState({
+            onedog: pets[0],
+            onecat:{},
+          })
+      }
+      else if(pets.length == 1 && !this.state.dogs.length) {
+        this.setState({
+          onecat: pets[0],
+          onedog:{},
+        })
+      }
     });
+
    Petservices.getNextInLineCats()
       .then(cats => {
         this.setState({
@@ -132,7 +133,7 @@ class Root extends Component {
 
   handleSubmit = (e) =>{
     e.preventDefault();
-    const newp = this.state.name;
+    let newp = this.state.name;
     peopleservice.addperson(this.state.name);
     this.setState({
       name: '',
@@ -239,7 +240,6 @@ class Root extends Component {
   //this runs the automatic adoption every 5 seconds, 
   callAdoptInEvery5 = () => {
       let pet = Math.floor(Math.random() * 2); 
-    
       if(pet === 1) {
         this.handleAdopt('cat')
       } else {
