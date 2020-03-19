@@ -68,10 +68,25 @@ class Root extends Component {
    updateState = () => {
      Petservices.getpets()
     .then(pets => {
+      if(pets.length==2){
       this.setState({
         onecat: pets[0],
         onedog: pets[1],
       })
+    }
+    else if(pets.length==1 && !this.state.cats.length){
+        this.setState({
+          onedog: pets[0],
+          onecat:null,
+        })
+    }
+    else if(pets.length==1 && !this.state.dogs.length){
+      this.setState({
+        onecat: pets[0],
+        onedog:null,
+      })
+  }
+
     });
    Petservices.getNextInLineCats()
       .then(cats => {
