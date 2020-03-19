@@ -77,13 +77,13 @@ class Root extends Component {
     else if(pets.length==1 && !this.state.cats.length){
         this.setState({
           onedog: pets[0],
-          onecat:null,
+          onecat:{},
         })
     }
     else if(pets.length==1 && !this.state.dogs.length){
       this.setState({
         onecat: pets[0],
-        onedog:null,
+        onedog:{},
       })
   }
 
