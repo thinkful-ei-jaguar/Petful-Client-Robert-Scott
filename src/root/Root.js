@@ -23,6 +23,8 @@ class Root extends Component {
       interval1:null,
       interval2: null,
       aretherepeople:false,
+      nomorecats:false,
+      nomoredogs:false,
     }
   }
 
@@ -63,41 +65,38 @@ class Root extends Component {
     })
   }
 
-  updateState = () => {
-    Petservices.getpets()
+   updateState = () => {
+     Petservices.getpets()
     .then(pets => {
       this.setState({
         onecat: pets[0],
         onedog: pets[1],
       })
     });
-    
-    if(this.state.cats == []) {
-      return;
-    } else {
-    Petservices.getNextInLineCats()
+   Petservices.getNextInLineCats()
       .then(cats => {
         this.setState({
           cats: cats,
           isLoading: true,
         })
+        if(cats===[]) {
+          this.setState({
+            nomorecats:true,
+          })
+        }
       })
-    }
-
-    if(this.state.cats == []) {
-      return;
-    } else {
     Petservices.getNextInLineDogs()
     .then(dogs => {
       this.setState({
         dogs: dogs,
         isLoading: true,
       })
-      if(this.state.dogs == []) {
-        return;
+      if(dogs === []) {
+        this.setState({
+          nomoredogs:true,
+        })
       }
     })
-    }
     peopleservice.getpeople()
     .then(peoples => {
       this.setState({
@@ -133,13 +132,6 @@ class Root extends Component {
   handleAdoptForUser = (event, type) => {
     event.preventDefault();
     let personAndAnimal = {};
-    
-    if(this.state.people[0] == this.state.iamthisperson){
-      this.setState({
-        iAmUser: false,
-        iamthisperson: '',
-      })
-    }
     //if cat is selected for adoption
     if(type === 'cat') {
       //set an object for pet & person
@@ -152,9 +144,6 @@ class Root extends Component {
 
       //if no one in state or the first person in the list is eql to user, exit function
       //and do not show adopt button
-      if(length == 0 || this.state.people[0] == this.state.iamthisperson) {
-        return;
-      }
       //slice the 1st person in list
       const newpeople = this.state.people.slice(1,length);
       //run the dq function
@@ -172,15 +161,18 @@ class Root extends Component {
         'person': this.state.people[0]
       }
       const length = this.state.people.length
-      if(length == 0 || this.state.people[0] == this.state.iamthisperson) {
-        return;
-      }
       const newpeople = this.state.people.slice(1,length);
       peopleservice.dq();
       this.setState({
         people:newpeople,
         whoAdoptedAnimal: [...this.state.whoAdoptedAnimal,personAndAnimal],
         isLoading3: true,
+      })
+    }
+    if(this.state.people[0] == this.state.iamthisperson){
+      this.setState({
+        iAmUser: false,
+        iamthisperson: '',
       })
     }
     Petservices.deletePet(type);
@@ -312,7 +304,7 @@ getAllPeople = () => {
 
     <h2>Adoption Waitlist: </h2>
     {this.state.isLoading2 ? this.getAllPeople() : <div />}
-    {this.state.onecat.length === 0 ? <p>No More Catz</p> :
+    {this.state.nomorecats ? <p>No More Catz</p> :
     <section>
       <div className='cat'>
         <h2>Adopt this Cat!</h2>
@@ -330,7 +322,7 @@ getAllPeople = () => {
     </section>
     }
 
-    {this.state.onedog.length === 0 ? <p>No More Dogz</p> :
+    {this.state.nomoredogs ? <p>No More Dogz</p> :
     <section>
       <div className='dog'>
         <h2>Adopt this Dog!</h2>
