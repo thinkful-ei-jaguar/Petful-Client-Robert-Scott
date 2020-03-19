@@ -6,7 +6,8 @@ import './Root.css';
 class Root extends Component {
   constructor(props){
     super(props);
-    this.state={
+    
+    this.state = {
       cats : [],
       dogs : [],
       onecat: {},
@@ -32,13 +33,15 @@ class Root extends Component {
         onecat: pets[0],
         onedog: pets[1],
       })
-    });
+    })
+
     Petservices.getNextInLineCats()
     .then(cats => {
       this.setState({
         cats: cats,
       })
-    });
+    })
+ 
     Petservices.getNextInLineDogs()
     .then(dogs => {
       this.setState({
@@ -46,6 +49,7 @@ class Root extends Component {
         isLoading: true,
       })
     });
+
     peopleservice.getpeople()
     .then(peoples => {
       this.setState({
@@ -53,6 +57,7 @@ class Root extends Component {
         isLoading2: true,
       }) 
     });
+
     this.setState({
       interval1: this.every5seconds(),
     })
@@ -66,16 +71,22 @@ class Root extends Component {
         onedog: pets[1],
       })
     });
+    
+    if(this.state.cats == []) {
+      return;
+    } else {
     Petservices.getNextInLineCats()
       .then(cats => {
         this.setState({
           cats: cats,
           isLoading: true,
         })
-        if(this.state.cats == []) {
-          return;
-        }
-    });
+      })
+    }
+
+    if(this.state.cats == []) {
+      return;
+    } else {
     Petservices.getNextInLineDogs()
     .then(dogs => {
       this.setState({
@@ -85,7 +96,8 @@ class Root extends Component {
       if(this.state.dogs == []) {
         return;
       }
-    });
+    })
+    }
     peopleservice.getpeople()
     .then(peoples => {
       this.setState({
@@ -94,7 +106,7 @@ class Root extends Component {
       }) 
       if(this.state.people == []){
         this.setState({
-          aretherepeople:true
+          aretherepeople: true
         })
       }
     });
@@ -110,37 +122,44 @@ class Root extends Component {
     peopleservice.addperson(this.state.name);
     this.setState({
       name: '',
-      iamthisperson:newp,
-      people:[...this.state.people,newp],
-      iAmUser:true,
+      iamthisperson: newp,
+      people: [...this.state.people,newp],
+      iAmUser: true,
       interval2: this.every5seconds2(),
     });
-
     this.updateState();
-
   }
 
-
-  handleAdoptforuser = (type) => {
-    let personAndAnimal = {}
-    if(this.state.people[0]==this.state.iamthisperson){
+  handleAdoptForUser = (event, type) => {
+    event.preventDefault();
+    let personAndAnimal = {};
+    
+    if(this.state.people[0] == this.state.iamthisperson){
       this.setState({
-        iAmUser:false,
-        iamthisperson:'',
+        iAmUser: false,
+        iamthisperson: '',
       })
     }
+    //if cat is selected for adoption
     if(type === 'cat') {
+      //set an object for pet & person
       personAndAnimal = 
       {
         'pet': this.state.onecat, 
         'person': this.state.people[0]
       }
       const length = this.state.people;
-      if(length == 0 || this.state.people[0]==this.state.iamthisperson) {
+
+      //if no one in state or the first person in the list is eql to user, exit function
+      //and do not show adopt button
+      if(length == 0 || this.state.people[0] == this.state.iamthisperson) {
         return;
       }
+      //slice the 1st person in list
       const newpeople = this.state.people.slice(1,length);
+      //run the dq function
       peopleservice.dq();
+      //set the new state with one less person and the data for who adopted which animal
       this.setState({
         people: newpeople,
         whoAdoptedAnimal: [...this.state.whoAdoptedAnimal, personAndAnimal],
@@ -153,7 +172,7 @@ class Root extends Component {
         'person': this.state.people[0]
       }
       const length = this.state.people.length
-      if(length == 0 || this.state.people[0]==this.state.iamthisperson) {
+      if(length == 0 || this.state.people[0] == this.state.iamthisperson) {
         return;
       }
       const newpeople = this.state.people.slice(1,length);
@@ -178,7 +197,7 @@ class Root extends Component {
         'person': this.state.people[0]
       }
       const length = this.state.people;
-      if(length == 0 || this.state.people[0]==this.state.iamthisperson) {
+      if(length == 0 || this.state.people[0] == this.state.iamthisperson) {
         return;
       }
       const newpeople = this.state.people.slice(1,length);
@@ -195,13 +214,13 @@ class Root extends Component {
         'person': this.state.people[0]
       }
       const length = this.state.people.length
-      if(length == 0 || this.state.people[0]==this.state.iamthisperson) {
+      if(length == 0 || this.state.people[0] == this.state.iamthisperson) {
         return;
       }
       const newpeople = this.state.people.slice(1,length);
       peopleservice.dq();
       this.setState({
-        people:newpeople,
+        people: newpeople,
         whoAdoptedAnimal: [...this.state.whoAdoptedAnimal,personAndAnimal],
         isLoading3: true,
       })
@@ -209,45 +228,49 @@ class Root extends Component {
     Petservices.deletePet(type);
     this.updateState();
   }
+
+  //this runs the automatic adoption every 5 seconds, 
   callAdoptInEvery5 = () => {
       let pet = Math.floor(Math.random() * 2); 
-      //console.log(pet);
-      let petType;
+    
       if(pet === 1) {
-        petType ='cat';
         this.handleAdopt('cat')
       } else {
-        petType = 'dog';
         this.handleAdopt('dog')
       }
   }
 
   every5seconds = () => {
    let add = setInterval(this.callAdoptInEvery5, 5000);
-
    if(this.state.aretherepeople){
       clearInterval(add)
     }
   }
-callNewPersonInEvery5 = () => {
-    if(this.state.people.length < 5&& this.state.people[0]===this.state.iamthisperson) {
+
+//function that limits to 5 people in list and when user is first in line
+callNewPersonInEvery6 = () => {
+    if(this.state.people.length < 5 && this.state.people[0] === this.state.iamthisperson) {
       peopleservice.addperson("joe lol");
       this.updateState();
     } else {
       return;
     }
 }
-
+//every 5 seconds(up to 5 people) after the submitted user is first in line
+//add a person
 every5seconds2 = () => {
- let add2 = setInterval(this.callNewPersonInEvery5, 6000);
+  setInterval(this.callNewPersonInEvery6, 6000);
 }
-  getALLPeople = () => {
-    return this.state.people.map((people, idx) => <div key={idx}>
+
+//this shows all the people in line for adoption
+getAllPeople = () => {
+  return this.state.people.map((people, idx) => <div key={idx}>
       <h3 >{people}</h3>
     </div>
     )
   }
 
+  //this will display the person who adopted which animal
   getWhoAdopted = () => {
     return this.state.whoAdoptedAnimal.map((animalandperson, idx)=>{
     return(<div key={idx}>
@@ -257,6 +280,7 @@ every5seconds2 = () => {
     })
   }
 
+  //this will show the remaining cats available for adoption 
   allOtherCats = () => {
     return this.state.cats.map((cat, idx) => <div key={idx}>
           <img className='otherCats' src={cat.imageURL} alt='Cat Pic'></img>
@@ -265,6 +289,7 @@ every5seconds2 = () => {
     )
   }
 
+  //this will show the remaining dogs available for adoption 
   allOtherDogs = () => {
     return this.state.dogs.map((dog, idx) => 
         <div key={idx}>
@@ -275,36 +300,38 @@ every5seconds2 = () => {
   }
 
   render(){
-  return( <div className='main'>
+  return( 
+  <div className='main'>
     <Link to="/" className='Logo'>Petful</Link>
 
-    <form onSubmit={this.handleSubmit}>
-      
+    <form onSubmit = {this.handleSubmit}>
       <label className='joinWaitlist'>Join the Waitlist:
-      <input value={this.state.name} onChange={this.handleChangeName} className='waitlistInput' type='text'></input></label>
+      <input value = {this.state.name} onChange = {this.handleChangeName} className='waitlistInput' type='text'></input></label>
       <input className='waitlistSubmit' type='submit'></input>
     </form>
 
-    <h2>Adoption Waitlist</h2>
-    {this.state.isLoading2 ? this.getALLPeople() : <div />}
+    <h2>Adoption Waitlist: </h2>
+    {this.state.isLoading2 ? this.getAllPeople() : <div />}
+    {this.state.onecat.length === 0 ? <p>No More Catz</p> :
     <section>
-      {this.state.cats === [] ? <p>No More Catz</p> :
       <div className='cat'>
         <h2>Adopt this Cat!</h2>
-        <img className='singleCatImg'src={this.state.onecat.imageURL} alt='Cat Pic'></img>
+        <img className='singleCatImg' src={this.state.onecat.imageURL} alt='Cat Pic'></img>
         <h3>Name: {this.state.onecat.name}</h3>
         <p>Age: {this.state.onecat.age}</p>
         <p>Breed: {this.state.onecat.breed}</p>
         <p>Description: {this.state.onecat.description}</p>
         <p>Gender: {this.state.onecat.gender}</p>
         <p>Story: {this.state.onecat.story}</p>
-        {(this.state.iAmUser && this.state.people[0] === this.state.iamthisperson ) ? <button className='adoptButton' onClick = {() => this.handleAdoptforuser('cat')}>Adopt</button> : <div />}
+        {/* if the current user who submitted to adopt is the first in line
+        and is eql to the state with the name, then adopt button will show */}
+        {(this.state.iAmUser && this.state.people[0] === this.state.iamthisperson ) ? <button className='adoptButton' onClick = {(e) => this.handleAdoptForUser(e, 'cat')}>Adopt</button> : <div />}
       </div>
-    }
     </section>
+    }
 
+    {this.state.onedog.length === 0 ? <p>No More Dogz</p> :
     <section>
-    {this.state.dogs === [] ? <p>No More Dogz</p> :
       <div className='dog'>
         <h2>Adopt this Dog!</h2>
         <img className='singleDogImg' src={this.state.onedog.imageURL} alt='Dog Pic'></img>
@@ -314,10 +341,12 @@ every5seconds2 = () => {
         <p>Description: {this.state.onedog.description}</p>
         <p>Gender: {this.state.onedog.gender}</p>
         <p>Story: {this.state.onedog.story}</p>
-        {(this.state.iAmUser &&this.state.people[0]===this.state.iamthisperson ) ?<button className='adoptButton' onClick={e => this.handleAdoptforuser(e, 'dog')}>Adopt</button> : <div />}
+        {/* if the current user who submitted to adopt is the first in line
+        and is eql to the state with the name, then adopt button will show */}
+        {(this.state.iAmUser && this.state.people[0] === this.state.iamthisperson ) ?<button className='adoptButton' onClick={e => this.handleAdoptForUser(e, 'dog')}>Adopt</button> : <div />}
       </div>
-    }
     </section>
+    }
 
     <h2>Successful Adoption List:</h2>
     {this.state.isLoading3 ? this.getWhoAdopted() : <div />}
